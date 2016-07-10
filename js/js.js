@@ -1,3 +1,0 @@
-function(){
-    cosole.log('dafafafafas');
-}
