@@ -6,7 +6,6 @@ var minifyCss = require('gulp-minify-css')
 var tar = require('gulp-tar');
 var gzip = require('gulp-gzip');
 var uglify = require('gulp-uglify');
-
 var css_input = 'css/*.css';
 var js_input = 'js/*.js';
 
@@ -26,10 +25,18 @@ gulp.task('cssmin', function () {
   .pipe(gulp.dest('css'));
 });
 
-/* 監視 */
-gulp.task('watch', function() {
-    gulp.watch(css_input,['cssmin']);
-    gulp.watch(js_input,['jsmin']);
+/* CSS監視 */
+gulp.task('watch_css', () => {
+    return watch([css_input], () => {
+        return gulp.start('cssmin');
+    });
 });
 
-gulp.task('default', ['watch']);
+/* JS監視 */
+gulp.task('watch_js', () => {
+    return watch([js_input], () => {
+        return gulp.start('jsmin');
+    });
+});
+
+gulp.task('default', ['watch_css','watch_js']);
