@@ -14,6 +14,9 @@ var plumber = require('gulp-plumber');
 /* 監視・圧縮対象 */
 var css_input = '/Users/k_mikami/work/gulp_example/css/**/*.css';
 var js_input = '/Users/k_mikami/work/gulp_example/js/**/*.js';
+/* 対象ディレクトリ */
+var css_output = '/Users/k_mikami/work/gulp_example/css';
+var js_output = '/Users/k_mikami/work/gulp_example/js';
 
 /* CSS監視 */
 gulp.task('watch_css', () => {
@@ -31,40 +34,29 @@ gulp.task('watch_js', () => {
 
 /* Javascript圧縮 */
 function jsmin(strfile){
-    gulp.src(strfile,{base:js_input})
+    gulp.src(strfile,{base:js_output})
     .pipe(plumber())
     .pipe(uglify())
     .pipe(rename({extname:'.js.min'}))
     .pipe(gzip())
-    .pipe(gulp.dest('js'));
+    .pipe(gulp.dest(js_output));
     return true;
 };
 /* css圧縮 */
 function cssmin(strfile) {
-    gulp.src(strfile,{base:css_input})
+    gulp.src(strfile,{base:css_output})
     .pipe(plumber())
     .pipe(clean_css())
     .pipe(rename({extname: '.css.min'}))
     .pipe(gzip())
-    .pipe(gulp.dest('css'));
+    .pipe(gulp.dest(css_output));
     return true;
 };
 
 // CSS全圧縮
 gulp.task("compress_all", function(){
-  gulp.src(css_input,{base:css_input})
-  .pipe(plumber())
-  .pipe(clean_css())
-  .pipe(rename({extname: '.css.min'}))
-  .pipe(gzip())
-  .pipe(gulp.dest('css'));
-
-  gulp.src(js_input,{base:js_input})
-  .pipe(plumber())
-  .pipe(uglify())
-  .pipe(rename({extname:'.js.min'}))
-  .pipe(gzip())
-  .pipe(gulp.dest('js'));
+  cssmin(css_input);
+  jsmin(js_input);
 });
 
 // タスク設定
